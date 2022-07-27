@@ -4,6 +4,10 @@ from sys import argv
 import groups
 
 
+def bit_count(integer1):
+    return bin(integer1).count("1")
+
+
 
 Nsites = int(sys.argv[1])
 Nflavor = 2*Nsites
@@ -387,7 +391,7 @@ def orbit_printer():
 def electron_number(list):
     number = []
     for m in list:
-        number.append(m[0].bit_count())
+        number.append(bit_count(m[0]))
     return "Number of electrons in each block:", number,"Number of blocks:",len(number)
 
 
