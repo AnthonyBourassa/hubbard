@@ -21,17 +21,17 @@ elif  Nsites == 3:
                           [1,0,1],
                           [1,1,0]]
 elif Nsites == 4:
-    interaction_matrix = [[0,1,0,1],
-                          [1,0,1,0],
-                          [0,1,0,1],
-                          [1,0,1,0]]
+    interaction_matrix = [[0,1,1,1],
+                          [1,0,1,1],
+                          [1,1,0,1],
+                          [1,1,1,0]]
 
 
 
 
 
 
-character_table = groups.group_create(Nsites,group)[1]
+
 
 #character_table = [[1,1,1],
 #                   [1,1,-1],
@@ -45,6 +45,7 @@ character_table = groups.group_create(Nsites,group)[1]
 
 symmetry_generator = groups.group_create(Nsites,group)[0]
 
+character_table = groups.group_create(Nsites,group)[1]
 
 
 def main():
@@ -52,28 +53,53 @@ def main():
   np.set_printoptions(linewidth=300)
 
   np.set_printoptions(threshold=sys.maxsize)
-
+  
+  np.set_printoptions(precision=2)
  # print(hamiltonian())
-
+  print("states orbits:")
   print(orbit_printer())
 
-
+  print("\n")
 
   print(electron_number(orbit_printer()))
-  print("      ",total_spin(orbit_printer()))
+  
 
 
-  print("matrices en bloc:")
+  print("       ",total_spin(orbit_printer()))
+  print("\n")
+  print("\n")
+
+  print("Block matrix:")
+  print("\n")  
+  
+ 
+
   for i in range(len(orbit_printer())):
-      print(block_matrix(orbit_printer()[i]))
-      print(np.linalg.eigh(block_matrix(orbit_printer()[i])))
+      print("Block number:",i)
       
-
-  print("matrice symetriques:")
+      print(block_matrix(orbit_printer()[i]))
+      print("\n")
+      
+      print("Eigenvalue of the block:",i)
+      
+      
+      print(np.linalg.eigh(block_matrix(orbit_printer()[i]))[0])
+      print("\n") 
+      
+  print("\n")
+  print("Block matrix with symmetric state basis:")
+  print("\n")
   for i in range(len(orbit_printer())):
+      print("Block number:",i)
+      
+     
       print(symmetric_block(orbit_printer()[i]))
-      print(np.linalg.eigh(symmetric_block(orbit_printer()[i])))
-
+      
+      print("\n")
+      print("Eigenvalue of the symmetric block:",i)
+     
+      print(np.linalg.eigh(symmetric_block(orbit_printer()[i]))[0])
+      print("\n")
 def generator(list1):
     list2 = []
     list3 = []
@@ -148,10 +174,11 @@ def group_action(state,symmetry):
 #Input:(5,1)
 #Output:1/2,[10],[5,-10]
 def symmetric_state(state,representation):
-    coefficient = 1/len(generator(symmetry_generator))
+    coefficient = 1/(len((generator(symmetry_generator)))**(1/2))
     list1 = []
     list2 = []
     list3 = []
+    sum = 0
     for i in range(len(generator(symmetry_generator))):
         for j in range(len(character_table[i])):
             list1.append((character_table[i][j])*group_action(state,generator(symmetry_generator)[j]))
@@ -163,9 +190,13 @@ def symmetric_state(state,representation):
     for i in range(1):
         for j in range(1,len(character_table[i])):
             list2.append((character_table[i][j])*group_action(state,generator(symmetry_generator)[j]))
-
+    
+    for i in range(len(list3)):
+        if list3[0][i] == state:
+            sum += 1
+    coefficient2 = coefficient**sum
             
-    return coefficient,list2,list3[representation]
+    return coefficient2,list2,list3[representation]
 
 
 
@@ -202,7 +233,7 @@ def product(state1,state2,rep1,rep2):
                 
     if rep1 != rep2:
         sum = 0 
-    return sum*symmetric_state(state1,rep1)[0]
+    return sum*symmetric_state(state1,rep1)[0]*symmetric_state(state2,rep1)[0]
 
 def occupied(state,flavor):
   return (state|(2**flavor)) == state
@@ -357,7 +388,7 @@ def electron_number(list):
     number = []
     for m in list:
         number.append(m[0].bit_count())
-    return "Nombre d'electron par bloc:", number,"Nombre total de blocs:",len(number)
+    return "Number of electrons in each block:", number,"Number of blocks:",len(number)
 
 
 
@@ -379,7 +410,7 @@ def total_spin(list):
         x = count
         spin.append(x)
 
-    return "Spin total par bloc:",spin
+    return "Total spin for each block:",spin
 
 
 
