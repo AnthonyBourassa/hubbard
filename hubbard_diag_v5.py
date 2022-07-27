@@ -61,15 +61,16 @@ def main():
   np.set_printoptions(precision=2)
  # print(hamiltonian())
   print("states orbits:")
-  print(orbit_printer())
+  orbit_list = orbit_printer()
+  print(orbit_list)
 
   print("\n")
 
-  print(electron_number(orbit_printer()))
+  print(electron_number(orbit_list))
   
 
 
-  print("       ",total_spin(orbit_printer()))
+  print("       ",total_spin(orbit_list))
   print("\n")
   print("\n")
 
@@ -78,31 +79,31 @@ def main():
   
  
 
-  for i in range(len(orbit_printer())):
+  for i in range(len(orbit_list)):
       print("Block number:",i)
       
-      print(block_matrix(orbit_printer()[i]))
+      print(block_matrix(orbit_list[i]))
       print("\n")
       
       print("Eigenvalue of the block:",i)
       
       
-      print(np.linalg.eigh(block_matrix(orbit_printer()[i]))[0])
+      print(np.linalg.eigh(block_matrix(orbit_list[i]))[0])
       print("\n") 
       
   print("\n")
   print("Block matrix with symmetric state basis:")
   print("\n")
-  for i in range(len(orbit_printer())):
+  for i in range(len(orbit_list)):
       print("Block number:",i)
       
      
-      print(symmetric_block(orbit_printer()[i]))
+      print(symmetric_block(orbit_list[i]))
       
       print("\n")
       print("Eigenvalue of the symmetric block:",i)
      
-      print(np.linalg.eigh(symmetric_block(orbit_printer()[i]))[0])
+      print(np.linalg.eigh(symmetric_block(orbit_list[i]))[0])
       print("\n")
 def generator(list1):
     list2 = []
@@ -422,6 +423,8 @@ def total_spin(list):
 #Each block correpond to the hamiltonian matrix part of a given orbit.
 def block_matrix(list):
     matrix = np.zeros((len(list),len(list)))
+
+
     for i in range(len(list)):
         for j in range(len(hopping(list[i]))):
             #matrix[j][j] = count(list[j])
@@ -452,12 +455,14 @@ def symmetric_block(list):
     else:
         list3 = len(character_table)*list2
     a = np.zeros((len(list3),len(list3)))
+
     for i in range(len(list3)):
         for j in range(len(list3)):
             sum1 = i//len(list2)
             sum2 = j//len(list2)
            
             a[i][j] = product(list3[i],list3[j],sum1,sum2)
+    return a
     idx = np.argwhere(np.all(a[..., :] == 0, axis=0))
     a2 = np.delete(a, idx, axis=1)
     a3 =a2[~np.all(a2 == 0, axis=1)]
