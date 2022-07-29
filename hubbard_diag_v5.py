@@ -4,6 +4,10 @@ from sys import argv
 import groups
 
 
+def bit_count(integer1):
+    return bin(integer1).count("1")
+
+
 
 Nsites = int(sys.argv[1])
 Nflavor = 2*Nsites
@@ -85,8 +89,6 @@ def main():
       print("Block number:",i)
       
       print(block_matrix(orbit[i]))
-      print("\n")
-      
       print("Eigenvalue of the block:",i)
       
       
@@ -411,7 +413,7 @@ def orbit_printer():
 def electron_number(list):
     number = []
     for m in list:
-        number.append(m[0].bit_count())
+        number.append(bit_count(m[0]))
     return "Number of electrons in each block:", number,"Number of blocks:",len(number)
 
 
@@ -442,6 +444,8 @@ def total_spin(list):
 #Each block correpond to the hamiltonian matrix part of a given orbit.
 def block_matrix(list):
     matrix = np.zeros((len(list),len(list)))
+
+
     for i in range(len(list)):
         for j in range(len(hopping(list[i]))):
             #matrix[j][j] = count(list[j])
@@ -472,6 +476,7 @@ def symmetric_block(list):
     else:
         list3 = len(character_table)*list2
     a = np.zeros((len(list3),len(list3)))
+
     for i in range(len(list3)):
         for j in range(len(list3)):
             sum1 = i//len(list2)
