@@ -26,6 +26,13 @@ elif Nsites == 4:
                           [1,1,0,1],
                           [1,1,1,0]]
 
+elif Nsites == 5:
+    interaction_matrix = [[0,1,1,1,1],
+                          [1,0,1,1,1],
+                          [1,1,0,1,1],
+                          [1,1,1,0,1],
+                          [1,1,1,1,0]]
+
 
 
 
@@ -57,15 +64,15 @@ def main():
   np.set_printoptions(precision=2)
  # print(hamiltonian())
   print("states orbits:")
-  print(orbit_printer())
-
+  orbit = orbit_printer()
+  print(orbit)
   print("\n")
 
-  print(electron_number(orbit_printer()))
+  print(electron_number(orbit))
   
 
 
-  print("       ",total_spin(orbit_printer()))
+  print("       ",total_spin(orbit))
   print("\n")
   print("\n")
 
@@ -74,32 +81,37 @@ def main():
   
  
 
-  for i in range(len(orbit_printer())):
+  for i in range(len(orbit)):
       print("Block number:",i)
       
-      print(block_matrix(orbit_printer()[i]))
+      print(block_matrix(orbit[i]))
       print("\n")
       
       print("Eigenvalue of the block:",i)
       
       
-      print(np.linalg.eigh(block_matrix(orbit_printer()[i]))[0])
+      print(np.linalg.eigh(block_matrix(orbit[i]))[0])
       print("\n") 
       
   print("\n")
   print("Block matrix with symmetric state basis:")
   print("\n")
-  for i in range(len(orbit_printer())):
+  for i in range(len(orbit)):
       print("Block number:",i)
       
      
-      print(symmetric_block(orbit_printer()[i]))
+      print(symmetric_block(orbit[i]))
       
       print("\n")
       print("Eigenvalue of the symmetric block:",i)
      
-      print(np.linalg.eigh(symmetric_block(orbit_printer()[i]))[0])
+      print(np.linalg.eigh(symmetric_block(orbit[i]))[0])
       print("\n")
+
+
+#This function give all groups elements from a symmetry generator.
+#Ex: [[1,0,2]] as entry mean that the site number 0 goes to number 1, site number 1 to 0 and two stay the same.It is the c2 symmetry generator.
+#Output: [[0,1,2,3,4,5],[1,0,2,4,3,5]] which are group elements of c2. They tell how to permute bit digit. [1,0,2,4,3,5] on 100100 (36)  give 010010 (18)
 def generator(list1):
     list2 = []
     list3 = []
@@ -178,8 +190,13 @@ def symmetric_state(state,representation):
     list1 = []
     list2 = []
     list3 = []
+    list4 = []
+    list5 = []
+    list6 = []
+    n = 3
     sum = 0
-    for i in range(len(generator(symmetry_generator))):
+    #for i in range(len(generator(symmetry_generator))):
+    for i in range(len(character_table)):
         for j in range(len(character_table[i])):
             list1.append((character_table[i][j])*group_action(state,generator(symmetry_generator)[j]))
             if j == len(character_table[i])-1:
@@ -194,9 +211,16 @@ def symmetric_state(state,representation):
     for i in range(len(list3)):
         if list3[0][i] == state:
             sum += 1
+    sum2 = sum * len(list3)
+    coefficient3 = 1/(sum2**(1/2))
     coefficient2 = coefficient**sum
+    list4 = list3[representation][:n]
+    list4 = list3[representation][:n]
+    list5 = list(set(list2))
+    if state in list5:
+        list5.remove(state)
             
-    return coefficient2,list2,list3[representation]
+    return coefficient3,list2,list3[representation]
 
 
 
@@ -383,7 +407,7 @@ def orbit_printer():
 
     return result
 
-
+#This give the number of electrons for a block matrix.
 def electron_number(list):
     number = []
     for m in list:
@@ -394,7 +418,7 @@ def electron_number(list):
 
 
 
-
+#This give the total spin for a block matrix.
 def total_spin(list):
     spin = []
     bucket = []
@@ -453,11 +477,10 @@ def symmetric_block(list):
             sum1 = i//len(list2)
             sum2 = j//len(list2)
            
-            a[i][j] = product(list3[i],list3[j],sum1,sum2)
+            a[i][j] = product(list3[i],list3[j],sum1,sum2)        
     idx = np.argwhere(np.all(a[..., :] == 0, axis=0))
     a2 = np.delete(a, idx, axis=1)
     a3 =a2[~np.all(a2 == 0, axis=1)]
-
     return a3
 
 
