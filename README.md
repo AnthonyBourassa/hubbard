@@ -2,7 +2,7 @@
 
 This project computes the energy eigenvalue of the simple Hubbard Hamiltonian by using exact diagonalization.
 
-## Table of contents
+## Table of contents.
 * [General info](#general-info)
 * [Technologies](#technologies)
 * [How to use](#how-to-use)
@@ -14,13 +14,13 @@ This project computes the energy eigenvalue of the simple Hubbard Hamiltonian by
 ## General info
 This project was done during my 2022 summer intership.
 	
-## Technologies
+## Technologies.
 Project is created with:
 * Python 3.10.4
 * Numpy library
 * sys library 
 	
-## How to use
+## How to use.
 The program takes two entries as parameters. The number of electronics sites and the symmetry group under which you want to symmetrize the Hamiltonian. 
 
 In the command line, it look like this:
@@ -63,14 +63,14 @@ $ python3 hubbard_diag_v5.py 2 "c2"
 ```
 and the program will return:
 
--The Hamiltonian matrix of the system. 
--All the sub-matrices in the symmetrized basis of the group.
--The total spin for each sub-matrices.
--The total number of electrons for each sub-matrices.
--The energy eigenvalues and eigenvectors of each sub-matrices
+*The Hamiltonian matrix of the system. 
+*All the sub-matrices in the symmetrized basis of the group.
+*The total spin for each sub-matrices.
+*The total number of electrons for each sub-matrices.
+*The energy eigenvalues and eigenvectors of each sub-matrices
 
 
-## Interaction matrix
+## Interaction matrix.
 The program suppose that all the sites are interacting with each other. However, if this is not the case, you can write an interaction matrix.
 For a 4 sites square system where there is no interaction between diagonals the interraction matrix would be as follow:
 ```
@@ -79,11 +79,11 @@ interaction_matrix = [[0,1,0,1],   (the zeroth sites does not interract with its
                       [0,1,0,1],
                       [1,0,1,0]]
 ```
-## Inspiration
+## Inspiration.
 This program has been inspired by annexe b of Dr Maxime Charlebois's PhD thesis: Théorie de champ moyen dynamique pour les systèmes inhomogènes.
 
-## Project status
+## Project status.
 Work in progress. Some changes has to be made to better suit non-abelian groups. 
 
-## Acknowledgement
+## Acknowledgement.
 Thanks to Dr Maxime Charlebois, my supervisor during this internship, for all his precious advices. 
