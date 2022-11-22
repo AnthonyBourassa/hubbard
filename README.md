@@ -63,11 +63,11 @@ $ python3 hubbard_diag_v5.py 2 "c2"
 ```
 and the program will return:
 
-*The Hamiltonian matrix of the system. 
-*All the sub-matrices in the symmetrized basis of the group.
-*The total spin for each sub-matrices.
-*The total number of electrons for each sub-matrices.
-*The energy eigenvalues and eigenvectors of each sub-matrices
+* The Hamiltonian matrix of the system. 
+* All the sub-matrices in the symmetrized basis of the group.
+* The total spin for each sub-matrices.
+* The total number of electrons for each sub-matrices.
+* The energy eigenvalues and eigenvectors of each sub-matrices
 
 
 ## Interaction matrix.
